@@ -12,6 +12,8 @@ class NewsViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //widgets
     @IBOutlet weak var topNews: UICollectionView!
     @IBOutlet weak var otherNews: UITableView!
+    @IBOutlet weak var logo: UIBarButtonItem!
+    @IBOutlet weak var profilePic: UIImageView!
     
     
     //var
@@ -97,7 +99,8 @@ class NewsViewController: UIViewController, UICollectionViewDelegate, UICollecti
         if segue.identifier == "postDetailsSegue"  {
             let indexPath = sender as! IndexPath
             let destination = segue.destination as! PostDetailsViewController
-
+            
+            destination.idPost = posts[indexPath.row]._id
             destination.pic = posts[indexPath.row].photo
             destination.date = posts[indexPath.row].createdAt
             destination.titleDet = posts[indexPath.row].title
@@ -109,6 +112,11 @@ class NewsViewController: UIViewController, UICollectionViewDelegate, UICollecti
     override func viewDidLoad() {
         super.viewDidLoad()
         scroller.contentSize = CGSize(width: 414, height: 1400)
+        
+        //set Profile Image
+        let profileimageurl = NSURL(string: UserDefaults.standard.string(forKey: "picture")!)
+        let profiledataimage = NSData(contentsOf: profileimageurl as! URL)
+        profilePic.image = UIImage(data: profiledataimage as! Data)
         // Do any additional setup after loading the view.
     }
     
@@ -124,7 +132,6 @@ class NewsViewController: UIViewController, UICollectionViewDelegate, UICollecti
             PostViewModel.sharedInstance.getAllPostes{ success, postsfromRep in
                 if success {
                     self.posts = postsfromRep! as! [Post]
-                    
                     self.topNews.reloadData()
                     self.otherNews.reloadData()
                 }else {
@@ -141,30 +148,4 @@ class NewsViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     
 
-}
-
-var vSpinner : UIView?
-
-extension UIViewController {
-    func showSpinner(onView : UIView) {
-        let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let ai = UIActivityIndicatorView.init(style: .whiteLarge)
-        ai.startAnimating()
-        ai.center = spinnerView.center
-        
-        DispatchQueue.main.async {
-            spinnerView.addSubview(ai)
-            onView.addSubview(spinnerView)
-        }
-        
-        vSpinner = spinnerView
-    }
-    
-    func removeSpinner() {
-        DispatchQueue.main.async {
-            vSpinner?.removeFromSuperview()
-            vSpinner = nil
-        }
-    }
 }

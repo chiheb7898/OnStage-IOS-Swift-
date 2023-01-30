@@ -3,24 +3,36 @@ PODS:
   - Cloudinary (2.10.1):
     - Cloudinary/ios (= 2.10.1)
   - Cloudinary/ios (2.10.1)
+  - MaterialComponents/LibraryInfo (124.2.0)
+  - Socket.IO-Client-Swift (16.0.1):
+    - Starscream (~> 4.0)
+  - Starscream (4.0.4)
   - SwiftyJSON (5.0.1)
 
 DEPENDENCIES:
   - Alamofire
   - Cloudinary (~> 2.0)
+  - MaterialComponents/LibraryInfo
+  - Socket.IO-Client-Swift
   - SwiftyJSON
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - Cloudinary
+    - MaterialComponents
+    - Socket.IO-Client-Swift
+    - Starscream
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 87bd8c952f9a4454320fce00d9cc3de57bcadaf5
   Cloudinary: 064f057fe9b7d6268ed74de5590920e21de6db0d
+  MaterialComponents: 1a9b2d9d45b1601ae544de85089adc4c464306d4
+  Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: 1f6dc9f5f8a4e95b6a3de9f95df4c35a7a2a3a9d
+PODFILE CHECKSUM: 9a1bda2a251f9a2dc2f6f65404916e302d3b5f34
 
 COCOAPODS: 1.11.3

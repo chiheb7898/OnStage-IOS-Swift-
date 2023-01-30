@@ -14,6 +14,7 @@ class PostDetailsViewController: UIViewController {
     var titleDet:String?
     var discription:String?
     var date:String?
+    var idPost:String?
     
     //widgets
     @IBOutlet weak var postPic: UIImageView!
@@ -25,12 +26,25 @@ class PostDetailsViewController: UIViewController {
         super.viewDidLoad()
         
         let imageurl = NSURL(string: pic!)
-        var dataimage = NSData(contentsOf: imageurl as! URL)
-        postPic.image = UIImage(data: dataimage as! Data)
+        let dataimage = NSData(contentsOf: imageurl! as URL)
+        postPic.image = UIImage(data: dataimage! as Data)
         postTitle.text = titleDet
         postDiscription.text = discription
         postDate.text = date
         // Do any additional setup after loading the view.
     }
+    @IBAction func showcomments(_ sender: Any) {
+        performSegue(withIdentifier: "showcomments", sender: sender)
+    }
+    @IBAction func likebtn(_ sender: Any) {
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showcomments"  {
+            let destination = segue.destination as! CommentsViewController
 
+            destination.IdPost = idPost
+        }
+
+    }
 }

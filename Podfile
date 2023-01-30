@@ -9,5 +9,7 @@ target 'OnStage' do
   pod 'SwiftyJSON'
   pod 'Alamofire'
   pod 'Cloudinary', '~> 2.0'
+  pod 'MaterialComponents/LibraryInfo'
+  pod 'Socket.IO-Client-Swift'
 
 end

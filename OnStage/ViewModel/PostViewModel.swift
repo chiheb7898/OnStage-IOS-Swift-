@@ -13,6 +13,7 @@ import UIKit.UIImage
 public class PostViewModel: ObservableObject{
     
     static let sharedInstance = PostViewModel()
+    let headers: HTTPHeaders = [ .contentType("application/json")]
     
     func getAllPostes( completed: @escaping (Bool, Any? ) -> Void) {
           //  print(user)
@@ -70,6 +71,58 @@ public class PostViewModel: ObservableObject{
         }
     
     
+    func AddComments(idpost: String,text: String,postedBy: String,username: String,userpicture: String,completed: @escaping (Bool) -> Void) {
+        
+        let parameters: [String: Any] = [
+            "postId" : idpost,
+            "text" : text,
+            "postedBy" : postedBy,
+            "username" : username,
+            "userpicture" : userpicture
+        ]
+        AF.request(url + "/addComment",
+                   method: .put,parameters: parameters,encoding: JSONEncoding.default,headers: headers
+                       )
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseData { response in
+                switch response.result {
+                case .success:
+                    completed(true)
+                case let .failure(error):
+                    debugPrint(error)
+                    completed(false)
+                }
+            }
+        }
+    
+    
+    func getComments(id: String,completed: @escaping (Bool, Any? ) -> Void) {
+        
+        let parameters: [String: Any] = [
+            "_id" : id
+        ]
+        AF.request(url + "/getComments",
+                   method: .post,parameters: parameters,encoding: JSONEncoding.default,headers: headers
+                       )
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseData { response in
+                switch response.result {
+                case .success:
+                    var Comments : [Comment]? = []
+                    for singleJsonItem in JSON(response.data!)["comments"]{
+                        Comments!.append(self.makecommentItem(jsonItem: singleJsonItem.1))
+                    }
+                    completed(true, Comments)
+                case let .failure(error):
+                    debugPrint(error)
+                    completed(false, nil)
+                }
+            }
+        }
+    
+    
     
     func makeItem(jsonItem: JSON) -> Post {
             //let isoDate = jsonItem["dateNaissance"]
@@ -82,6 +135,17 @@ public class PostViewModel: ObservableObject{
                 comments: jsonItem["comments"].stringValue,
                 createdAt: jsonItem["createdAt"].stringValue,
                 updatedAt: jsonItem["updatedAt"].stringValue
+            )
+        }
+    
+    func makecommentItem(jsonItem: JSON) -> Comment {
+            //let isoDate = jsonItem["dateNaissance"]
+            return Comment(
+                _id: jsonItem["_id"].stringValue,
+                text: jsonItem["text"].stringValue,
+                postedBy: jsonItem["postedBy"].stringValue,
+                username: jsonItem["username"].stringValue,
+                userpicture: jsonItem["userpicture"].stringValue
             )
         }
     
